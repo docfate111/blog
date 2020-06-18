@@ -1,2 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2020-06-18T09:43:29-07:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">The blog</title><subtitle>Stay tuned for updates</subtitle><entry><title type="html">Hello World!</title><link href="http://localhost:4000/blog/testing123/2020/05/28/welcome.html" rel="alternate" type="text/html" title="Hello World!" /><published>2020-05-28T18:07:13-07:00</published><updated>2020-05-28T18:07:13-07:00</updated><id>http://localhost:4000/blog/testing123/2020/05/28/welcome</id><content type="html" xml:base="http://localhost:4000/blog/testing123/2020/05/28/welcome.html">&lt;p&gt;A phrase said by K &amp;amp; R in their book on C programming to test if you are all set up to code.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2020-06-18T10:59:28-07:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">The blog</title><subtitle>Stay tuned for updates</subtitle><entry><title type="html">Poking the Deep Web Part 1</title><link href="http://localhost:4000/blog/misc/2020/06/18/deepweb1.html" rel="alternate" type="text/html" title="Poking the Deep Web Part 1" /><published>2020-06-18T10:00:00-07:00</published><updated>2020-06-18T10:00:00-07:00</updated><id>http://localhost:4000/blog/misc/2020/06/18/deepweb1</id><content type="html" xml:base="http://localhost:4000/blog/misc/2020/06/18/deepweb1.html">&lt;p&gt;Hello, this is my first substantive post so please excuse my bad grammar.&lt;/p&gt;
+
+&lt;p&gt;This one is about the deep web.&lt;/p&gt;
+
+&lt;p&gt;What is the deep web? I think most people reading this may
+already know what it is, but I will explain in case some one doesn’t.
+It is the 90% of the Internet that is not accessible by regular browsers including
+sites that you must be logged in to view and small subnets that require services like
+Tor to connect to. The part I am looking at it is visible to Tor, however the deep web is much more than what is accessible by Tor. Since Tor keeps users anonymous on the deep web by jumping from server to server it is very slow. A way to speed up connections is to connect to a bridge, which I did. However, my connection still really slow and I could only log into some sites, probably because some were taken down or because of networking problems.&lt;/p&gt;
+
+&lt;p&gt;Anyways, I logged in on Tuesday night for the first time
+using Tor and Tor browser on Parrot OS Linux. I found many blogs and sites
+by open source software organizations and universities about the value of privacy,
+forums for programmers and hackers, and many others. There are some sites that were
+listed on the hidden wiki that were obviously illegal, such as some labelled “hire a hitman”, “hire a hacker”, “buy fake ids”, “buy drugs”, which I did not click on.
+If you plan on going on the Deep Web be careful where you click as some sites are given bizarre names that don’t explain what is on the site. I accidentally clicked on one of these and it lead to a horrible and illegal site that I wish I hadn’t seen.&lt;/p&gt;
+
+&lt;p&gt;Anyways, I am only going to talk about sites that were interesting to me, none of which contain illegal material.
+There were 2 facebook clones that kept all of the users anonymous and a Reddit
+clone named “Dreaddit” that was completely anonymous. All three of those sites seemed dead and only had a few users on it so I left them to look for more interesting stuff.&lt;/p&gt;
+
+&lt;p&gt;One hypnotic site labelled “:3” was a bunch of spinning “:3” symbols/emojis:
+&lt;img src=&quot;https://docfate111.github.io/images/1.png&quot; alt=&quot;Broken image :3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Another labelled itself as a site for “crypto-anarchists”:
+&lt;img src=&quot;https://docfate111.github.io/images/2.png&quot; alt=&quot;Broken image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;One was an ethical hacktivist site:
+&lt;img src=&quot;https://docfate111.github.io/images/3.png&quot; alt=&quot;Broken image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;But the site that really caught my eye was labelled “Sophie says HIIIIIIIE!”
+&lt;img src=&quot;https://docfate111.github.io/images/4.png&quot; alt=&quot;Broken image&quot; /&gt;
+Initially this site scared me because it played eerie audio suddenly and it was 1 am at night.
+The hex on the site is&lt;/p&gt;
+
+&lt;p&gt;“Sophie welcomes you.&lt;/p&gt;
+
+&lt;p&gt;Patience is a virtue, especially in the Tor network.&lt;/p&gt;
+
+&lt;p&gt;So is Perseverance as there are decoys. Sophie loves making things difficult for others ;)&lt;/p&gt;
+
+&lt;p&gt;Let’s begin.&lt;/p&gt;
+
+&lt;p&gt;Good luck.”
+Then there is an image labelled XOR.png (what do I xor it with the binary?) that contains “Sophie will give you the other half…You don’t need to ask her even.”
+in its metadata&lt;/p&gt;
+
+&lt;p&gt;and then there is binary(which I haven’t cracked and is not ASCII) underneath:
+“10011111 10100111 10111110 10111101 11011111 11111101 11011111
+11011010 11111111 10010100 11001110 11011110 11111111 11111110 11101100
+10111100 11110001 10011100 11001111 11111110 10010000 11111110”.&lt;/p&gt;
+
+&lt;p&gt;Also in the source code of the page is a url at the bottom to a user on blackhatworld.com (presumably sophie or the site’s creator) but it can only be accessed with an account on the site.&lt;/p&gt;
+
+&lt;p&gt;Furtherore, when I checked to /server-status there was mention of another page queenkxfax3izzer.onion:80 containing a strange image (shown below) that decodes to the message “Wonderland”.
+&lt;img src=&quot;https://docfate111.github.io/images/5.png&quot; alt=&quot;Broken image&quot; /&gt;
+Entering the code word into the box below the image takes you to a site labelled
+“Huh?” which is a dead end(I think?) containing an image of a cat and a queen.&lt;/p&gt;
+
+&lt;p&gt;Another site related to “Sophie says hi” is one labelled key.png which simply an image of Napolean:
+&lt;img src=&quot;https://docfate111.github.io/images/7.jpg&quot; alt=&quot;Broken image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I searched everywhere I could for more information about this mysterious site and all I could find were a few Reddit posts. There are no solutions anywhere so I decided to make this post. From these Reddit posts, I found urls to several
+other deep web puzzle sites, but I was only able to connect to two of them-one that contained a code and greeted you with “how deep can you go” and another with a painting and a bizarre encoded message(the creator of this site can be connected with on Reddit as he posted the link).&lt;/p&gt;
+
+&lt;p&gt;If you would like to help me with these challenges or just see the sites the urls to them are in the screenshots. You can connect to them using Tor.
+Additionally, the website source, images, and audio files for the three puzzle sites (that I have collected so far, obviously there will be more on later levels) are &lt;a href=&quot;https://github.com/docfate111/random-stuff-found-on-deep-web&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Future post topics(depending on readers’ interest):&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;rambling about GNU, Privacy, Linux, and the Open Source/Free(not in price but in personal rights) Software Movement&lt;/li&gt;
+  &lt;li&gt;The rest of this site if I can solve the challenges&lt;/li&gt;
+  &lt;li&gt;Eisner nominee list came out recently so comic book review?&lt;/li&gt;
+  &lt;li&gt;What my summer job is&lt;/li&gt;
+  &lt;li&gt;Cybersecurity/hacking challenges-mainly reversing and binary exploits&lt;/li&gt;
+&lt;/ol&gt;</content><author><name></name></author><summary type="html">Hello, this is my first substantive post so please excuse my bad grammar.</summary></entry><entry><title type="html">Hello World!</title><link href="http://localhost:4000/blog/testing123/2020/05/28/welcome.html" rel="alternate" type="text/html" title="Hello World!" /><published>2020-05-28T18:07:13-07:00</published><updated>2020-05-28T18:07:13-07:00</updated><id>http://localhost:4000/blog/testing123/2020/05/28/welcome</id><content type="html" xml:base="http://localhost:4000/blog/testing123/2020/05/28/welcome.html">&lt;p&gt;A phrase said by K &amp;amp; R in their book on C programming to test if you are all set up to code.
 This is just a test to see if this site works.&lt;/p&gt;</content><author><name></name></author><summary type="html">A phrase said by K &amp;amp; R in their book on C programming to test if you are all set up to code. This is just a test to see if this site works.</summary></entry></feed>
