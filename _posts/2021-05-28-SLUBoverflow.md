@@ -7,13 +7,13 @@ categories: SecurityResearch
 
 # Introduction
 
-This bug is kind of useless except if the specific driver is present, the debug fs is enabled, and the debugfs is somehow not root. 
+This bug is kind of useless except if the specific driver is present, the debugfs is enabled, and the debugfs is somehow accessible to not root users. 
 I didn't have the gaming laptop or GPU for this specific driver so I just copied the vulnerable function and function it is used in into QEMU for exploiting.
 The vulnerability was introduced somewhere in the Linux Kernel 5.8-rc2 branch and fixed in [5.14.15](https://patchwork.freedesktop.org/patch/461554/?series=96341&rev=2). I found it by auditing the source for a long time and reported it to AMD. They fixed the bug quickly and found other places it was present.
 
 # Vulnerability
 
-The bug is to quote Specter from the Day[0] podcast: "pretty lame". Three basic heap overflows in two in kmalloc-64 and one in kmalloc-128 SLUB.
+The bug is a simple typo, we all make mistakes and C is unforgiving. Instead of wr_buf_size, size(which is user-controlled) is passed into all of the write functions, allowing SLUB buffer overflow. In the SLUB(Linux kernel's heap), allocations are in placed into caches based on size. For example, an allocation between 32 and 64 bytes goes into the kmalloc-64 "slab" or cache and an allocation between 64 and 96 bytes would go into the kmalloc-96 slab(if there is one, otherwise the kmalloc-128 slab). There were three basic heap overflows in two in kmalloc-64 and one in kmalloc-128 SLUB.
 In dp_phy_test_pattern_debugfs_write
 ```
 
@@ -103,6 +103,10 @@ Around kernel version 5.6 it was moved to the middle of the SLUB allocations to 
 however since this overflow is an infinite number of bytes it does not affect the exploit.
 
 ```
+/ $ id
+uid=1000(ctf) gid=1000 groups=1000
+/ $ cat /root/flag
+cat: /root/flag: Permission denied
 / $ ls /home/ctf
 / $ ./e
 [*] Opened device
@@ -147,6 +151,7 @@ However if CONFIG_SLAB_FREELIST_HARDENED is enabled for the kernel, user page fa
 However, in kernel version 5.11 userfaultfd by non-privileged user is not allowed by default so it would not work in those versions.
 So instead overwriting some function pointer on the heap(and hoping no other fields are before it) and executing a ROP chain and KPTI trampoline would need to happen instead.
 Another way of exploiting is overwriting the freelist pointer's last byte with zero to point to the buffer allocated in the vulnerable function(only would work in the times the last byte of the buffer allocated was zero). Then the attacker could use the use-after-free to get an arbitrary write primitive.
+Another mitigation is to prevent modprobe overwrite via enabling CONFIG_STATIC_USERMODEHELPER, the only way I can think of getting around is the Wall of Perdition strategy again which requires userfaultfd being available to the unprivileged user.
 
 # Conclusion
 
