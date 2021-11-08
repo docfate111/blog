@@ -9,7 +9,7 @@ categories: SecurityResearch
 
 This bug is kind of useless except if the specific driver is present, the debugfs is enabled, and the debugfs is somehow accessible to not root users. 
 I didn't have the gaming laptop or GPU for this specific driver so I just copied the vulnerable function and function it is used in into QEMU for exploiting.
-The vulnerability was introduced somewhere in the Linux Kernel 5.8-rc2 branch and fixed in [5.14.15](https://patchwork.freedesktop.org/patch/461554/?series=96341&rev=2). I found it by auditing the source for a long time and reported it to AMD. They fixed the bug quickly and found other places it was present.
+The vulnerability was introduced somewhere in the Linux Kernel 5.8-rc2 branch and fixed in [5.14.15](https://patchwork.freedesktop.org/patch/461554/?series=96341&rev=2). I found it by auditing the source for a long time and reported it to AMD. They fixed the bug quickly and found other places it was present. I also reported it to MITRE and they assigned in the CVE.
 
 # Vulnerability
 
@@ -73,7 +73,7 @@ Pretty vanilla no amazing new technique.
 # Information leak/KASLR bypass
  
 Using [elastic objects](https://zplin.me/papers/ELOISE.pdf) you can overwrite the size of the next field so that copy_to_user copies more data.
-I chose msg_msg since it is easy to use for heap sprays.
+I chose msg_msg(created when message queues - a type of UNIX-like IPC are made) since it is easy to use for heap sprays.
 
 ```
 struct msg_msg {
@@ -88,7 +88,7 @@ struct msg_msg {
 ```
 1. Allocating 3 contiguous msg_msg objects(via msgsnd syscall) and then a subprocess_info struct by socket( socket(22, AF_INET, 0); - creating invalid socket will allocate this struct in the kmalloc-128 cache) 
 2. Free the one to replace with the victim since SLUB will usually allocate the next slub at the address the last was freed
-3. Trigger the vulnerable function in the driver to overflow the msg_msg object underneath
+3. Trigger the vulnerable function in the driver to overflow the msg_msg object in the adjacent memory chunk.
 4. Overwrite the type(to receive messages of the type) and size to be 0x2000 bytes.
 5. Call recv_msg COPY_MSG to read the message in place to avoid dereferencing the bad addresses in m_list from when we overwrote the size, as explained [here](https://a13xp0p0v.github.io/2021/02/09/CVE-2021-26708.html)
 
@@ -99,6 +99,9 @@ Awesome now we have some kernel addresses. Initially when I was trying to exploi
 In my opinion arbitrary write is more powerful than just overwriting a function pointer on the heap and without the hastle of trying to setup conditions such that the function pointer will run without the other corrupted data in the struct preventing getting to a portion of the code in which the code the function pointer points to would be executed. Also no need to deal with most of the mitigations.
 
 The SLUB allocates the next chunk based on the freelist pointer which is a pointer to where the next allocation should be.
+So we can trick the SLUB to allocate the chunk of memory containing the modprobe_path(path of binary to execute if an invalid script is run) and give
+it to the user as a msg_msg in the text section(which is where userspace data will be copied into via msgsnd syscall).
+
 Around kernel version 5.6 it was moved to the middle of the SLUB allocations to prevent single byte overflow exploits from overwriting it, 
 however since this overflow is an infinite number of bytes it does not affect the exploit.
 
@@ -146,7 +149,7 @@ Cool now we can as an unprivileged user run the script we write in modprobe_path
 # Alternative exploit strategies/mitigations
 
 I spent a lot of time trying overflowing kmalloc-64 but I wasn't able get a reliable kernel address leak. In kmalloc-128 the subprocess_info struct was the obvious choice but I don't know any struct like that for for kmalloc-64(if you do contact me please). I was still able to leak kernel addresses they just were at random places all the time. 
-In kmalloc-64, this overflow is possible to gain arbitrary write via the same way.
+In kmalloc-64, this overflow is possible to gain arbitrary write via the same way - overwriting the freelist.
 However if CONFIG_SLAB_FREELIST_HARDENED is enabled for the kernel, user page faulting is required to get a write primitive since the freelist is xored with random bytes making whatever is overwritten become gibberish. Using userfaultfd, I was [trying](https://github.com/docfate111/CVE-2021-42327/blob/main/exploit_userfaultfd.c) to get an arbitrary write via FizzBuzz's new strategy the [Wall of Perdition](https://syst3mfailure.io/wall-of-perdition). 
 However, in kernel version 5.11 userfaultfd by non-privileged user is not allowed by default so it would not work in those versions.
 So instead overwriting some function pointer on the heap(and hoping no other fields are before it) and executing a ROP chain and KPTI trampoline would need to happen instead.
