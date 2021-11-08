@@ -92,7 +92,7 @@ struct msg_msg {
 4. Overwrite the type(to receive messages of the type) and size to be 0x2000 bytes.
 5. Call recv_msg COPY_MSG to read the message in place to avoid dereferencing the bad addresses in m_list from when we overwrote the size, as explained [here](https://a13xp0p0v.github.io/2021/02/09/CVE-2021-26708.html)
 
-Awesome now we have some kernel addresses. Initially when I was trying to exploit in kmalloc-64, I was trying to calculate the offset but then when I tried the kmalloc-128 overflow I saw modprobe_path and thought (modprobe_path overwrite)[https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/] would be easier. 
+Awesome now we have some kernel addresses. Initially when I was trying to exploit in kmalloc-64, I was trying to calculate the offset but then when I tried the kmalloc-128 overflow I saw modprobe_path and thought [modprobe_path overwrite](https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/) would be easier. 
 
 # Arbitrary write
 
@@ -137,7 +137,7 @@ flag
 / $ cat /home/ctf/flag
 CTF{ONLY_ROOT_CAN_READ_THIS}
 ```
-Cool now we can as an unprivileged user run the script we write in modprobe_path whenever we run a file with an invalid format(for more info read the link for modprobe overwrite). Code is (here)[https://github.com/docfate111/CVE-2021-42327/blob/main/exploit.c]
+Cool now we can as an unprivileged user run the script we write in modprobe_path whenever we run a file with an invalid format(for more info read the link for modprobe overwrite). Code is [here](https://github.com/docfate111/CVE-2021-42327/blob/main/exploit.c). In this example I wrote /tmp/x to modprobe_path which changes the permissions of the flag and moves it into /home/ctf from /root.
 
 # Alternative exploit strategies
 
