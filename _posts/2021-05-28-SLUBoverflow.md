@@ -139,7 +139,7 @@ CTF{ONLY_ROOT_CAN_READ_THIS}
 ```
 Cool now we can as an unprivileged user run the script we write in modprobe_path whenever we run a file with an invalid format(for more info read the link for modprobe overwrite). Code is [here](https://github.com/docfate111/CVE-2021-42327/blob/main/exploit.c). In this example I wrote /tmp/x to modprobe_path which changes the permissions of the flag and moves it into /home/ctf from /root.
 
-# Alternative exploit strategies
+# Alternative exploit strategies/mitigations
 
 I spent a lot of time trying overflowing kmalloc-64 but I wasn't able get a reliable kernel address leak. In kmalloc-128 the subprocess_info struct was the obvious choice but I don't know any struct like that for for kmalloc-64(if you do contact me please). I was still able to leak kernel addresses they just were at random places all the time. 
 In kmalloc-64, this overflow is possible to gain arbitrary write via the same way.
@@ -150,7 +150,7 @@ Another way of exploiting is overwriting the freelist pointer's last byte with z
 
 # Conclusion
 
-I'm a beginner so feel free to email me any tips/criticisms/corrections. My contact info should be below.
+I'm a beginner so feel free to email me any tips/criticisms/corrections/questions. My contact info should be below.
 
 
 
