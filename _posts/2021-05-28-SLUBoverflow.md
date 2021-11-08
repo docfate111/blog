@@ -62,7 +62,7 @@ char *wr_buf_ptr = NULL;
 
 # Mitigations
 
-![mitigation_meme](/assets/mitigation_meme.jpg)
+![mitigation_meme](https://docfate111.github.io/images/mitigation_meme.jpg)
 
 For the exploit I am using the default [KASLR](https://en.wikipedia.org/wiki/Address_space_layout_randomization), [SMEP](https://j00ru.vexillium.org/2011/06/smep-what-is-it-and-how-to-beat-it-on-windows/), [SMAP](https://en.wikipedia.org/wiki/Supervisor_Mode_Access_Prevention), and [KPTI](https://en.wikipedia.org/wiki/Kernel_page-table_isolation). Enabling SELinux wouldn't effect the exploit but it would actually make it easier since the security pointer in msg_msg can be used for KASLR leak. Enabling FGKASLR also wouldn't affect either exploit since modprobe_path isn't a function and Function Granular KASLR only randomizes the addresses of functions in memory.
 
