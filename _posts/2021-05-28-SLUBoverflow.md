@@ -103,8 +103,6 @@ Around kernel version 5.6 it was moved to the middle of the SLUB allocations to 
 however since this overflow is an infinite number of bytes it does not affect the exploit.
 
 ```
-
-```
 / $ ls /home/ctf
 / $ ./e
 [*] Opened device
