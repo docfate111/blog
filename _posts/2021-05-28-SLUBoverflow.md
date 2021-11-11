@@ -105,6 +105,8 @@ it to the user as a msg_msg in the text section(which is where userspace data wi
 Around kernel version 5.6 it was moved to the middle of the SLUB allocations to prevent single byte overflow exploits from overwriting it, 
 however since this overflow is an infinite number of bytes it does not affect the exploit.
 
+In order to get the freelist pointer directly after the victim chunk I sprayed a bunch of msg_msg objects(just allocating and freeing a bunch via msgsnd and msgrcv), to clean up the past allocations.
+
 ```
 / $ id
 uid=1000(ctf) gid=1000 groups=1000
