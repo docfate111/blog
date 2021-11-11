@@ -7,9 +7,9 @@ categories: SecurityResearch
 
 # Introduction
 
-This bug is kind of useless except if the specific driver is present, the debugfs is enabled, and the debugfs is somehow accessible to not root users. 
+This bug is kind of useless except if the specific driver is present, the debugfs is enabled, and the debugfs is somehow accessible to non-root users. 
 I didn't have the gaming laptop or GPU for this specific driver so I just copied the vulnerable function and function it is used in into QEMU for exploiting.
-The vulnerability was introduced somewhere in the Linux Kernel 5.8-rc2 branch and fixed in [5.14.15](https://patchwork.freedesktop.org/patch/461554/?series=96341&rev=2). I found it by auditing the source for a long time and reported it to AMD. They fixed the bug quickly and found other places it was present. I also reported it to MITRE and they assigned in the CVE.
+The vulnerability was introduced somewhere in the Linux Kernel 5.8-rc2 branch and fixed in [5.14.15](https://patchwork.freedesktop.org/patch/461554/?series=96341&rev=2). I found it by auditing the source for a long time and reported it to AMD. They fixed the bug quickly and found other places it was present. I also reported it to MITRE and they assigned it the CVE.
 
 # Vulnerability
 
