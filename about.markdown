@@ -4,15 +4,7 @@ title: About
 permalink: /about/
 ---
 
-Blog about cybersecurity, computer science, and random nonsense.
-
-# What are these weird names?
-
-Markdown Mondays: journal entry-like recap of my week. Markdown is the
-language the blogs are written in. And you can probably guess the Mondays
-part.
-
-Wholesome Writeups: solutions to cybersecurity questions that I thought were interesting
+Blog about cybersecurity, computer science, and random nonsense that will be updated way less than I originally planned.
 
 # Can you write about X topic?
 
