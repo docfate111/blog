@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Maybe an Android driver bug possibly
-date:   2022-11-07 18:32:13 -0700
+date:   2022-07-31 18:32:13 -0700
 categories: SecurityResearch
 ---
 
