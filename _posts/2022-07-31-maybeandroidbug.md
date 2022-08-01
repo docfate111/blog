@@ -9,7 +9,7 @@ categories: SecurityResearch
 
 I got a new phone and since I had some time in the summer between finals and my internship I decided to look for bugs in the code via auditing the [source](https://opensource.samsung.com/uploadSearch?searchValue=SM-A136).
 I mainly just looked at custom drivers for the Linux kernel. I don't know if this code is actually used in the phone but there is a character driver file /dev/audio_ipi on some devices(i.e. my old phone).
-Initially I thought the bug wasn't there since I couldn't trigger a crash in qemu(I took the vulnerable code and [removed some code to emulate it](https://github.com/docfate111/testing_android_driver)) but after I increased the number of cores from 1 to 2 the crash was triggered.
+Initially I thought the bug wasn't there since I couldn't trigger a crash in qemu(I took the vulnerable code and [removed some code to emulate it](https://github.com/docfate111/testing_android_driver)) but after I increased the number of cores from 1 to 2 the PoC crashed the kernel.
 
 
 # Vulnerability
