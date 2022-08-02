@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Maybe an Android driver bug possibly
+title:  Potential Android driver race condition
 date:   2022-07-31 18:32:13 -0700
 categories: SecurityResearch
 ---
@@ -8,9 +8,10 @@ categories: SecurityResearch
 # Introduction
 
 I got a new phone and since I had some time in the summer between finals and my internship I decided to look for bugs in the code via auditing the [source](https://opensource.samsung.com/uploadSearch?searchValue=SM-A136).
-I mainly just looked at custom drivers for the Linux kernel. I don't know if this code is actually used in the phone but there is a character driver file /dev/audio_ipi on some devices(i.e. my old phone).
+I mainly just looked at custom drivers for the Linux kernel. I don't know if this code is actually used in the phone but there is a character driver file /dev/audio_ipi on some devices(i.e. checking with adb shell on my old phone).
 Initially I thought the bug wasn't there since I couldn't trigger a crash in qemu(I took the vulnerable code and [removed some code to emulate it](https://github.com/docfate111/testing_android_driver)) but after I increased the number of cores from 1 to 2 the PoC crashed the kernel.
-
+The bug requires capabalities to interact with the driver and somehow escaping the Android sandbox. The main reason I am not sure if the driver is 
+used in any Android devices is that the code requires specific hardware and is written as a framework to add functionality to.
 
 # Vulnerability
 
