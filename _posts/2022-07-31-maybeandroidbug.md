@@ -238,7 +238,7 @@ I also reported to Samsung but they only consider Samsung specific vulnerabiliti
 # Random takeaways
 
 It was cool to learn about gen_pool allocations and how they can do allocations and deallocations concurrently. As a result, the race condition has to be in between uses of freeing and allocating rather than within the function
-gen_pool_free and gen_pool_alloc. It has some checks to prevent freeing a different size than what was allocated.
+gen_pool_free and gen_pool_alloc. It has some checks to prevent freeing a different size than what was allocated and atomically updates a bitmap on what memory chunks are allocated and free. These checks prevent use-after-free, double free, or freeing an incorrect size as possible attacks and instead logs them(if kernel logging is enabled).
 
 Apparently Android phones use old kernel versions so that old drivers aren't broken. Since these old versions don't support mitigations,
 they are implemented by code from Knox.
