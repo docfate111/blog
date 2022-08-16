@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Potential Android driver race condition
+title:  CVE-2022-21789: Android driver race condition
 date:   2022-07-31 18:32:13 -0700
 categories: SecurityResearch
 ---
@@ -12,6 +12,8 @@ I mainly just looked at custom drivers for the Linux kernel. I don't know if thi
 Initially I thought the bug wasn't there since I couldn't trigger a crash in qemu(I took the vulnerable code and [removed some code to emulate it](https://github.com/docfate111/testing_android_driver)) but after I increased the number of cores from 1 to 2 the PoC crashed the kernel.
 The bug requires capabalities to interact with the driver and somehow escaping the Android sandbox. The main reason I am not sure if the driver is 
 used in any Android devices is that the code requires specific hardware and is written as a framework to add functionality to.
+
+**Edit: I didn't know at the time of writing the post but [this code was in use in phones](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-21789).**
 
 # Vulnerability
 
@@ -223,15 +225,10 @@ the hardest part would be to increase the race window in between functions.
 
 # Reporting
 
-It is a duplicate someone else already found and reported but for some reason never publicly reported.
+It is a duplicate someone else already found and disclosed sometime in November 2021 and became public August 2022.
 ```
 MediaTek Security Team believes that this is a duplicate of an issue previously reported by another external researcher.
 The original issue was tracked by: ALPS06478101
-
-Thank you. Where can I find the issue/report? 
-
-We are unable to share the original report.
-Apologize for this!
 ```
 I also reported to Samsung but they only consider Samsung specific vulnerabilities not covered by AOSP common issues or chipset vendors.
 
