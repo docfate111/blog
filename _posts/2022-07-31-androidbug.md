@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  CVE-2022-21789: Android driver race condition
+title:  CVE-2022-21789 Android driver race condition
 date:   2022-07-31 18:32:13 -0700
 categories: SecurityResearch
 ---
