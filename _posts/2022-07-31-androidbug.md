@@ -7,17 +7,13 @@ categories: SecurityResearch
 
 # Introduction
 
-I got a new phone and since I had some time in the summer between finals and my internship I decided to look for bugs in the code via auditing the [source](https://opensource.samsung.com/uploadSearch?searchValue=SM-A136).
-I mainly just looked at custom drivers for the Linux kernel. I don't know if this code is actually used in the phone but there is a character driver file /dev/audio_ipi on some devices(i.e. checking with adb shell on my old phone).
-Initially I thought the bug wasn't there since I couldn't trigger a crash in qemu(I took the vulnerable code and [removed some code to emulate it](https://github.com/docfate111/testing_android_driver)) but after I increased the number of cores from 1 to 2 the PoC crashed the kernel.
-The bug requires capabalities to interact with the driver and somehow escaping the Android sandbox. The main reason I am not sure if the driver is 
-used in any Android devices is that the code requires specific hardware and is written as a framework to add functionality to.
+I got a new phone and since I had some time in the summer between finals and my internship I decided to look for bugs in the code by auditing the source. I mainly just looked at custom drivers for the Linux kernel. I don’t know if this code is actually used in the phone but there is a character driver file /dev/audio_ipi on some devices(i.e. checking with adb shell on my old phone). Initially, I thought the bug wasn’t there since I couldn’t trigger a crash in qemu(I took the vulnerable code and removed some code to emulate it) but after I increased the number of cores from 1 to 2 the PoC crashed the kernel. The bug requires capabilities to interact with the driver and somehow escape the Android sandbox. The main reason I am not sure if the driver is used in any Android devices is that the code requires specific hardware and is written as template code.
 
 **Edit: I didn't know at the time of writing the post but [this code was in use in phones](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-21789).**
 
 # Vulnerability
 
-The main bug is that there is a global array that is used without any synchronization primitives in the ioctl so the user can cause a crash and possible leak memory or get code execution.
+The main bug is that there is a global array that is used without any synchronization primitives in the ioctl so the user can make concurrent accesses to this array. This can cause a crash, leak memory, and get code execution.
 
 The ioctl in drivers/misc/mediatek/audio_ipi/common/framework/audio_ipi_driver.c
 ```
@@ -126,8 +122,8 @@ g_dma_pool and g_dma are global arrays.
 
 Uh oh.
 
-Both audio_ipi_dma_alloc_region and audio_ipi_dma_free_region reads and writes from two global arrays: g_dma and g_dma_pool which are 
-also being read and written to by other functions that can also be running at the same time.
+Both audio_ipi_dma_alloc_region and audio_ipi_dma_free_region read and write from two global arrays: g_dma and g_dma_pool which can 
+also be read and written to by other functions concurrently.
 
 Maybe we could also call another function from the ioctl in drivers/misc/mediatek/audio_ipi/common/framework/audio_ipi_driver.c
 at the same time:
@@ -171,7 +167,7 @@ In audio_ipi_dma_write_region in the file drivers/misc/mediatek/audio_ipi/common
 1170         ret = audio_region_write_from_linear(dsp_id, 
 1171                                              region, data_buf, data_size);
 ```
-Region is usercontrolled since g_dma[dsp_id]->region[task][0] can be edited.
+Region is usercontrolled since g_dma[dsp_id]->region[task][0] can be edited by a user using the ioctl.
 ```
 890 static int audio_region_write_from_linear(uint32_t dsp_id,
 891                 struct audio_region_t *region,
@@ -219,13 +215,13 @@ from
 1402                          p_ipi_msg->dma_info.rw_idx);
 ```
 
-So with these bugs we can read overflow to get a leak for KASLR and write overflow to corrupt some structures in memory and get code execution(see last blog post or someone elses for how to arb write or ROP)
+So with these bugs, we can read overflow to get a leak for KASLR and write overflow to corrupt some structures in memory and get code execution(see last blog post or someone else for how to arb write or ROP)
 I did not write any exploit just a [PoC](https://github.com/docfate111/testing_android_driver/blob/c1c65936def5168b4b59f53240581ee91eeb1c36/src/test.c) to cause a crash but
 the hardest part would be to increase the race window in between functions.
 
 # Reporting
 
-It is a duplicate someone else already found and disclosed sometime in November 2021 and became public August 2022.
+It is a duplicate someone else already found and disclosed some time in November 2021 and became public August 2022.
 ```
 MediaTek Security Team believes that this is a duplicate of an issue previously reported by another external researcher.
 The original issue was tracked by: ALPS06478101
@@ -235,10 +231,10 @@ I also reported to Samsung but they only consider Samsung specific vulnerabiliti
 # Random takeaways
 
 It was cool to learn about gen_pool allocations and how they can do allocations and deallocations concurrently. As a result, the race condition has to be in between uses of freeing and allocating rather than within the function
-gen_pool_free and gen_pool_alloc. It has some checks to prevent freeing a different size than what was allocated and atomically updates a bitmap on what memory chunks are allocated and free. These checks prevent use-after-free, double free, or freeing an incorrect size as possible attacks and instead logs them(if kernel logging is enabled).
+gen_pool_free and gen_pool_alloc. It has some checks to prevent freeing a different size than what was allocated and atomically updates a bitmap on what memory chunks are allocated and free. These checks prevent use-after-free, double-free, or freeing an incorrect size as possible attacks and instead log them(if kernel logging is enabled).
 
-Apparently Android phones use old kernel versions so that old drivers aren't broken. Since these old versions don't support mitigations,
+Apparently, Android phones use old kernel versions so that old drivers aren't broken. Since these old versions don't support mitigations,
 they are implemented by code from Knox.
-In this old version there was an [integer overflow](https://lore.kernel.org/lkml/20210111130051.675602171@linuxfoundation.org/) in gen_pool_alloc but it user controlled value is uint32_t which is fine to convert to size_t.
+In this old version, there was an [integer overflow](https://lore.kernel.org/lkml/20210111130051.675602171@linuxfoundation.org/) in gen_pool_alloc but the user controlled value is uint32_t. However, this is fine to convert to size_t.
 
-If there is anything I got wrong(typos or technical info) or you know how I can get access to the original report please email me.
+If there is anything I got wrong(typos or technical info) or if you know how I can get access to the original report please email me.
